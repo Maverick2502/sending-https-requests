@@ -17,6 +17,9 @@ function App() {
         throw new Error("Something went wrong!");
       }
       const data = await res.json();
+
+      const data = await res.json();
+
       const transformedMovies = data.results.map((movieData) => {
         return {
           id: movieData.episode_id,
@@ -26,6 +29,8 @@ function App() {
         };
       });
       setMovies(transformedMovies);
+      setIsLoading(false);
+
     } catch (error) {
       setError(error.message);
     }
@@ -54,8 +59,14 @@ function App() {
         <button onClick={fetchMoviesHandler}>Fetch Movies</button>
       </section>
       <section>
+
         {/* {!isLoading && movies.length > 0 && <MoviesList movies={movies} />}
         {!isLoading && movies.length === 0 && !error && <p>Found no movies.</p>}
+
+        {!isLoading && movies.length > 0 && <MoviesList movies={movies} />}
+        {!isLoading && movies.length === 0 && !error && <p>Found no movies.</p>}
+        {!isLoading && error && <p>{error}</p>}
+
         {isLoading && <p>Loading...</p>}
         {!isLoading && <p>{error}</p>} */}
         {content}
