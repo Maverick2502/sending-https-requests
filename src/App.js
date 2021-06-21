@@ -20,32 +20,52 @@ function App() {
         throw new Error("Something went wrong!");
       }
       const data = await res.json();
-      const transformedMovies = data.results.map((movieData) => {
-        return {
-          id: movieData.episode_id,
-          title: movieData.title,
-          openingText: movieData.opening_crawl,
-          releaseData: movieData.release_data,
-        };
-      });
-      setMovies(transformedMovies);
+
+      const loadedMovies = [];
+
+      for (const key in data) {
+        loadedMovies.push({
+          id: key,
+          title: data[key].title,
+          openingText: data[key].openingText,
+          releaseDate: data[key].releaseDat,
+        });
+      }
+
+      // const transformedMovies = data.results.map((movieData) => {
+      //   return {
+      //     id: movieData.episode_id,
+      //     title: movieData.title,
+      //     openingText: movieData.opening_crawl,
+      //     releaseDate: movieData.release_data,
+      //   };
+      // });
+      // setMovies(transformedMovies);
+
+      setMovies(loadedMovies);
     } catch (error) {
       setError(error.message);
     }
     setIsLoading(false);
-  }, [console.log("useCallback")]);
+  }, []);
 
-  useEffect(
-    () => {
-      console.log("useEffect");
-      fetchMoviesHandler();
-    },
-    fetchMoviesHandler,
-    console.log("useEffect - fetched")
-  );
+  useEffect(() => {
+    fetchMoviesHandler();
+  }, fetchMoviesHandler);
 
-  function addMovieHandler(movie) {
-    console.log(movie);
+  async function addMovieHandler(movie) {
+    const res = await fetch(
+      "https://react-http-2021-default-rtdb.firebaseio.com/movies.json",
+      {
+        method: "POST",
+        body: JSON.stringify(movie),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await res.json();
+    console.log(data);
   }
 
   let content = <p>Found no movies</p>;
