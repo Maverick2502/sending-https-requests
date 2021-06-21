@@ -1,6 +1,7 @@
-import React, { useState, Fragment, useEffect, useCallback } from "react";
+import React, { useState, Fragment, useCallback, useEffect } from "react";
 import MoviesList from "./components/MoviesList";
 import "./App.css";
+import AddMovie from "./components/AddMovie";
 
 function App() {
   const [movies, setMovies] = useState([]);
@@ -11,7 +12,10 @@ function App() {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await fetch("https://swapi.dev/api/films/");
+      const res = await fetch(
+        "https://react-http-2021-default-rtdb.firebaseio.com/movies.json"
+      );
+      // const res = await fetch("https://swapi.dev/api/films/");
       if (!res.ok) {
         throw new Error("Something went wrong!");
       }
@@ -29,11 +33,20 @@ function App() {
       setError(error.message);
     }
     setIsLoading(false);
-  }, []);
+  }, [console.log("useCallback")]);
 
-  useEffect(() => {
-    fetchMoviesHandler();
-  }, [fetchMoviesHandler]);
+  useEffect(
+    () => {
+      console.log("useEffect");
+      fetchMoviesHandler();
+    },
+    fetchMoviesHandler,
+    console.log("useEffect - fetched")
+  );
+
+  function addMovieHandler(movie) {
+    console.log(movie);
+  }
 
   let content = <p>Found no movies</p>;
 
@@ -50,17 +63,14 @@ function App() {
   return (
     <Fragment>
       <section>
+        <AddMovie onAddMovie={addMovieHandler} />
+      </section>
+      <section>
         <button onClick={fetchMoviesHandler}>Fetch Movies</button>
       </section>
       <section>
-<<<<<<< HEAD
-        {!isLoading && movies.length > 0 && <MoviesList movies={movies} />}
-        {!isLoading && movies.length === 0 && !error && <p>Found no movies.</p>}
-        {!isLoading && error && <p>{error}</p>}
-=======
         {/* {!isLoading && movies.length > 0 && <MoviesList movies={movies} />}
         {!isLoading && movies.length === 0 && !error && <p>Found no movies.</p>}
->>>>>>> project-argo
         {isLoading && <p>Loading...</p>}
         {!isLoading && <p>{error}</p>} */}
         {content}
