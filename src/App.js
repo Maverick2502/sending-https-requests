@@ -1,7 +1,7 @@
 import React, { useState, Fragment, useCallback, useEffect } from "react";
 import MoviesList from "./components/MoviesList";
-import "./App.css";
 import AddMovie from "./components/AddMovie";
+import "./App.css";
 
 function App() {
   const [movies, setMovies] = useState([]);
@@ -28,7 +28,7 @@ function App() {
           id: key,
           title: data[key].title,
           openingText: data[key].openingText,
-          releaseDate: data[key].releaseDat,
+          releaseDate: data[key].releaseDat
         });
       }
 
@@ -51,7 +51,7 @@ function App() {
 
   useEffect(() => {
     fetchMoviesHandler();
-  }, fetchMoviesHandler);
+  }, [fetchMoviesHandler]);
 
   async function addMovieHandler(movie) {
     const res = await fetch(
@@ -60,8 +60,8 @@ function App() {
         method: "POST",
         body: JSON.stringify(movie),
         headers: {
-          "Content-Type": "application/json",
-        },
+          "Content-Type": "application/json"
+        }
       }
     );
     const data = await res.json();
